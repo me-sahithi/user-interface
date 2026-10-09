@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Front-End User Interfaces</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --border: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        h1 { margin: 0; font-size: 24px; }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .ui-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .ui-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        /* 1. Responsive Navbar Styles */
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: var(--primary); color: white; padding: 10px 15px; border-radius: 4px; }
+        .nav-links { display: none; flex-direction: column; gap: 5px; width: 100%; margin-top: 10px; }
+        .nav-links.active { display: flex; }
+        .hamburger { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+        /* 2. Accordion Styles */
+        .accordion-header { background: var(--border); border: none; width: 100%; padding: 10px; text-align: left; cursor: pointer; border-radius: 4px; font-weight: bold; margin-top: 5px; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding: 0 10px; font-size: 14px; }
+        .accordion-body.open { max-height: 100px; padding: 10px; }
+
+        /* 3. Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: var(--card-bg); padding: 20px; border-radius: 8px; width: 250px; text-align: center; }
+
+        /* 4. Tabs Component */
+        .tab-buttons { display: flex; gap: 5px; }
+        .tab-btn { flex: 1; padding: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-color); cursor: pointer; }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .tab-content { display: none; padding: 10px 0; font-size: 14px; }
+        .tab-content.active { display: block; }
+
+        /* 5. Custom Card with Hover */
+        .hover-card { border: 1px solid var(--border); padding: 10px; border-radius: 6px; transition: transform 0.2s, box-shadow 0.2s; }
+        .hover-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+
+        /* 6. Simple Form Validation */
+        .form-group { margin-bottom: 10px; }
+        .form-group input { width: 100%; padding: 6px; box-sizing: border-box; border: 1px solid var(--border); border-radius: 4px; background: var(--card-bg); color: var(--text-color); }
+        .error-msg { color: #ef4444; font-size: 12px; display: none; }
+
+        /* Utility Buttons */
+        button.action-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        button.action-btn:hover { background: var(--primary-hover); }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header>
+        <h1>10 User Interface Components</h1>
+        <button class="theme-toggle" id="themeToggle">Toggle Dark Mode</button>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. Responsive Navbar -->
+        <div class="ui-card">
+            <h3>1. Responsive Navbar</h3>
+            <div class="navbar">
+                <span>Brand</span>
+                <button class="hamburger" id="navToggle">☰</button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#" style="color:var(--text-color); text-decoration:none;">Home</a>
+                <a href="#" style="color:var(--text-color); text-decoration:none;">About</a>
+                <a href="#" style="color:var(--text-color); text-decoration:none;">Contact</a>
+            </div>
+        </div>
+
+        <!-- 2. Accordion -->
+        <div class="ui-card">
+            <h3>2. FAQ Accordion</h3>
+            <button class="accordion-header" onclick="toggleAccordion(this)">What is this project?</button>
+            <div class="accordion-body">It is a collection of 10 essential UI components built with vanilla HTML, CSS, and JS.</div>
+            <button class="accordion-header" onclick="toggleAccordion(this)">Is it responsive?</button>
+            <div class="accordion-body">Yes, built using responsive CSS grid layout.</div>
+        </div>
+
+        <!-- 3. Modal Popup -->
+        <div class="ui-card">
+            <h3>3. Modal Popup</h3>
+            <button class="action-btn" onclick="openModal()">Open Modal</button>
+            <div class="modal-overlay" id="modalOverlay">
+                <div class="modal-box">
+                    <h4>Modal Window</h4>
+                    <p style="font-size:14px;">This is a functional popup window.</p>
+                    <button class="action-btn" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Tabs Component -->
+        <div class="ui-card">
+            <h3>4. Tabs Component</h3>
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab(event, 'tab1')">Tab 1</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab2')">Tab 2</button>
+            </div>
+            <div id="tab1" class="tab-content active">Content for the first tab panel.</div>
+            <div id="tab2" class="tab-content">Content for the second tab panel.</div>
+        </div>
+
+        <!-- 5. Hover Effect Card -->
+        <div class="ui-card">
+            <h3>5. Interactive Hover Card</h3>
+            <div class="hover-card">
+                <h4 style="margin:0 0 5px 0;">Hover Over Me</h4>
+                <p style="margin:0; font-size:13px;">This card features smooth elevation and transform transitions on hover.</p>
+            </div>
+        </div>
+
+        <!-- 6. Form Validation -->
+        <div class="ui-card">
+            <h3>6. Simple Form Validation</h3>
+            <form id="sampleForm" onsubmit="validateForm(event)">
+                <div class="form-group">
+                    <input type="email" id="emailInput" placeholder="Enter email address">
+                    <span class="error-msg" id="errorMsg">Please enter a valid email.</span>
+                </div>
+                <button type="submit" class="action-btn">Submit</button>
+            </form>
+        </div>
+
+        <!-- 7. Dynamic Counter -->
+        <div class="ui-card">
+            <h3>7. Interactive Counter</h3>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0;" id="counterValue">0</p>
+            <button class="action-btn" onclick="updateCounter(1)">Increment</button>
+            <button class="action-btn" style="background:#ef4444;" onclick="updateCounter(-1)">Decrement</button>
+        </div>
+
+        <!-- 8. Search Filter -->
+        <div class="ui-card">
+            <h3>8. Live Search Filter</h3>
+            <input type="text" id="searchInput" placeholder="Search item..." onkeyup="filterList()" style="width:100%; padding:6px; box-sizing:border-box; margin-bottom:8px; border:1px solid var(--border); border-radius:4px; background:var(--card-bg); color:var(--text-color);">
+            <ul id="itemList" style="margin:0; padding-left:15px; font-size:14px;">
+                <li>HTML Basics</li>
+                <li>CSS Flexbox</li>
+                <li>JavaScript DOM</li>
+            </ul>
+        </div>
+
+        <!-- 9. Simple Tooltip -->
+        <div class="ui-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <h3>9. Custom Tooltip</h3>
+            <div style="position:relative; display:inline-block; cursor:pointer;" onclick="alert('Tooltip clicked!')">
+                <span style="background:var(--primary); color:white; padding:6px 12px; border-radius:4px;">Hover/Click Me</span>
+            </div>
+        </div>
+
+        <!-- 10. Progress Bar -->
+        <div class="ui-card">
+            <h3>10. Animated Progress Bar</h3>
+            <div style="width:100%; background:var(--border); border-radius:4px; height:12px; overflow:hidden; margin-bottom:10px;">
+                <div id="progressBar" style="width: 70%; height:100%; background:var(--primary); transition: width 0.5s;"></div>
+            </div>
+            <button class="action-btn" onclick="setProgress()">Randomize Progress</button>
+        </div>
+
+    </div>
+
+    <script>
+        /* Dark Mode Toggle */
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
+        });
+
+        /* 1. Navbar Toggle */
+        document.getElementById('navToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        /* 2. Accordion */
+        function toggleAccordion(btn) {
+            const body = btn.nextElementSibling;
+            body.classList.toggle('open');
+        }
+
+        /* 3. Modal */
+        function openModal() { document.getElementById('modalOverlay').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+        /* 4. Tabs */
+        function switchTab(evt, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        /* 6. Form Validation */
+        function validateForm(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const error = document.getElementById('errorMsg');
+            if(!email.includes('@')) {
+                error.style.display = 'block';
+            } else {
+                error.style.display = 'none';
+                alert('Form submitted successfully!');
+            }
+        }
+
+        /* 7. Counter */
+        let count = 0;
+        function updateCounter(val) {
+            count += val;
+            document.getElementById('counterValue').innerText = count;
+        }
+
+        /* 8. Search Filter */
+        function filterList() {
+            let filter = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.getElementById('itemList').getElementsByTagName('li');
+            for (let i = 0; i < items.length; i++) {
+                let txt = items[i].innerText || items[i].textContent;
+                items[i].style.display = txt.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        /* 10. Progress Bar */
+        function setProgress() {
+            let randomVal = Math.floor(Math.random() * 100) + 1;
+            document.getElementById('progressBar').style.width = randomVal + '%';
+        }
+    </script>
+</body>
+</html>
